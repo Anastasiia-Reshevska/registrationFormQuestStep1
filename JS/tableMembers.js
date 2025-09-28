@@ -7,50 +7,48 @@ function getListMembers() {
       createTableMembers(data.data);
     });
 }
-if (document.getElementById("table-members")) {
+if (document.getElementById('table-members')) {
   getListMembers();
 }
 
-function createTableMembers (members) {
-  const tableMembers = document.createElement("table");
-    tableMembers.className = "table";
+function createTableMembers(members) {
+  const tableMembers = document.createElement('table');
+  tableMembers.className = 'table';
 
-    const titleTable = document.createElement("thead");
-    titleTable.className = "thead-dark";
+  const titleTable = document.createElement('thead');
+  titleTable.className = 'thead-dark';
 
-    const titleRowThead = document.createElement("tr");
+  const titleRowThead = document.createElement('tr');
 
-    const header = ["Photo", "Firstname and Lastname", "Report subject", "Emails"];
-    header.forEach((item) => {
-      const thCol = document.createElement("th");
-      thCol.scope = "col";
-      thCol.textContent = item;
-      titleRowThead.appendChild(thCol);
-    });
-    titleTable.appendChild(titleRowThead);
+  const header = [
+    'Photo',
+    'Firstname and Lastname',
+    'Report subject',
+    'Emails',
+  ];
+  header.forEach((item) => {
+    const thCol = document.createElement('th');
+    thCol.scope = 'col';
+    thCol.textContent = item;
+    titleRowThead.appendChild(thCol);
+  });
+  titleTable.appendChild(titleRowThead);
 
-    const tbody = document.createElement("tbody");
-    const titleRowTbody  = document.createElement("tr");
+  const tbody = document.createElement('tbody');
+  const titleRowTbody = document.createElement('tr');
 
-    const thRow = document.createElement("th");
-    thRow.scope = "row";
-    titleRowThead.appendChild(thRow);
+  const thRow = document.createElement('th');
+  thRow.scope = 'row';
+  titleRowThead.appendChild(thRow);
 
-    for(let i = 0; i < header.length; i++) {
-      const td = document.createElement("td");
-      thRow.appendChild(td);
-    }
-    tbody.appendChild(titleRowTbody);
-    titleRowTbody.appendChild(thRow);
-    tableMembers.appendChild(titleTable);
-    tableMembers.appendChild(tbody);
-    document.getElementById("table-members").appendChild(tableMembers);
-  for (let i = 0; i < members.length; i++) {
-
+  for (let i = 0; i < header.length; i++) {
+    const td = document.createElement('td');
+    thRow.appendChild(td);
   }
+  tbody.appendChild(titleRowTbody);
+  titleRowTbody.appendChild(thRow);
+  tableMembers.appendChild(titleTable);
+  tableMembers.appendChild(tbody);
+  document.getElementById('table-members').appendChild(tableMembers);
+  for (let i = 0; i < members.length; i++) {}
 }
-
-
-
-
-
