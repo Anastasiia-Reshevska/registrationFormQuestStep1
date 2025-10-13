@@ -1,15 +1,19 @@
 function getListMembers() {
-  const urlMembers = 'http://quest-registration-api.groupbwt.com/api/members';
+  const urlMembers = 'http://quest-registration-api.groupbwt.com/api/members?per_page=100';
   fetch(urlMembers)
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
+      const maxIndex = data.data.length;
+      const allMembers = document.querySelectorAll('.all-members');
+      allMembers.forEach((item) => {
+        const textMembers = `All members: ${maxIndex}`;
+        item.textContent = textMembers;
+      });
       createTableMembers(data.data);
     });
 }
-if (document.getElementById('table-members')) {
-  getListMembers();
-}
+getListMembers();
 
 function createTableMembers(members) {
   const tableMembers = document.createElement('table');
@@ -17,15 +21,9 @@ function createTableMembers(members) {
 
   const titleTable = document.createElement('thead');
   titleTable.className = 'thead-dark';
-
   const titleRowThead = document.createElement('tr');
 
-  const header = [
-    'Photo',
-    'Firstname and Lastname',
-    'Report subject',
-    'Emails',
-  ];
+  const header = ['Photo', 'Name', 'Report subject', 'Emails'];
   header.forEach((item) => {
     const thCol = document.createElement('th');
     thCol.scope = 'col';
@@ -35,20 +33,42 @@ function createTableMembers(members) {
   titleTable.appendChild(titleRowThead);
 
   const tbody = document.createElement('tbody');
-  const titleRowTbody = document.createElement('tr');
+  const td = document.createElement('td');
 
-  const thRow = document.createElement('th');
-  thRow.scope = 'row';
-  titleRowThead.appendChild(thRow);
+  members.forEach((member) => {
+    const titleRowTbody = document.createElement('tr');
 
-  for (let i = 0; i < header.length; i++) {
-    const td = document.createElement('td');
-    thRow.appendChild(td);
-  }
-  tbody.appendChild(titleRowTbody);
-  titleRowTbody.appendChild(thRow);
+    const photo = document.createElement('td');
+
+    const image = document.createElement('img');
+    if (member.photo_url === null) {
+      image.classList.add('photo-default');
+      image.src = '/images/photo-default.jpg';
+    } else {
+      image.src =`http://quest-registration-api.groupbwt.com/` + member.photo_url;
+    }
+
+    photo.textContent = `${member.photo_url}`;
+    titleRowTbody.appendChild(photo);
+    photo.appendChild(image);
+
+    const tdName = document.createElement('td');
+    tdName.textContent = `${member.firstname} ${member.lastname}`;
+    titleRowTbody.appendChild(tdName);
+
+    const tdReportSubject = document.createElement('td');
+    tdReportSubject.textContent = `${member.report_subject}`;
+    titleRowTbody.appendChild(tdReportSubject);
+
+    const tdEmail = document.createElement('td');
+    tdEmail.textContent = `${member.email}`;
+    titleRowTbody.appendChild(tdEmail);
+
+    tbody.appendChild(titleRowTbody);
+  });
+
   tableMembers.appendChild(titleTable);
   tableMembers.appendChild(tbody);
+
   document.getElementById('table-members').appendChild(tableMembers);
-  for (let i = 0; i < members.length; i++) {}
 }
