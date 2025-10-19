@@ -1,0 +1,148 @@
+input.parsley-success,
+select.parsley-success,
+textarea.parsley-success {
+  color: #468847;
+  background-color: #DFF0D8;
+  border: 1px solid #D6E9C6;
+}
+
+input.parsley-error,
+select.parsley-error,
+textarea.parsley-error {
+  color: #B94A48;
+  background-color: #F2DEDE;
+  border: 1px solid #EED3D7;
+}
+
+.parsley-errors-list {
+  margin: 2px 0 3px;
+  padding: 0;
+  list-style-type: none;
+  font-size: 0.9em;
+  line-height: 0.9em;
+  opacity: 0;
+  color: #B94A48;
+  transition: all .3s ease-in;
+  -o-transition: all .3s ease-in;
+  -moz-transition: all .3s ease-in;
+  -webkit-transition: all .3s ease-in;
+
+  .filled {
+    opacity: 1;
+  }
+}
+
+.container--width {
+  max-width: 600px;
+}
+
+.d-f-c {
+  display: flex;
+  flex-direction: column;
+}
+
+.iti__selected-country {
+  height: 38px;
+}
+
+.hide {
+  display: none;
+}
+
+.form-control.iti__tel-input.parsley-success.error {
+  color: #212529;
+  background: #F2DEDE;
+  border: 1px solid #F2DEDE;
+}
+
+.iti input.iti__tel-input,
+.iti input.iti__tel-input[type=text],
+.iti input.iti__tel-input[type=tel] {
+  margin-top: 1px !important;
+}
+
+.list-btn {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  padding-left: 0;
+  list-style: none;
+
+  button {
+    width: 180px;
+    height: 40px;
+    color: #212529;
+    border: 1px solid #007bff;
+    border-radius: 20px;
+
+    &:hover {
+      border: 4px solid #007bff;
+      transition: border 0.5s ease-out;
+    }
+  }
+}
+
+#preview-img {
+  max-width: 100%;
+  width: 570px;
+  max-height: 250px;
+  margin-top: 20px;
+  object-fit: cover;
+}
+
+.table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+
+  th,
+  td {
+    word-break: break-all;
+    border: 1px solid #ccc;
+  }
+
+  th {
+    font-size: 10px;
+    width: 22%;
+    text-align: center;
+    vertical-align: middle;
+
+    &:first-child {
+      width: 15%;
+    }
+
+    @media screen and (min-width: 768px) {
+      font-size: 14px;
+    }
+
+    @media screen and (min-width: 768px) {
+      font-size: 14px;
+    }
+  }
+
+  td {
+    font-size: 10px;
+    text-align: center;
+
+    &:first-child {
+      color: transparent;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+      max-height: 100px;
+      margin: 0 auto;
+    }
+
+    @media screen and (min-width: 768px) {
+      font-size: 14px;
+      text-align: center;
+    }
+  }
+}
+
+.all-members {
+  font-weight: 600;
+  text-align: center;
+}

@@ -1,3 +1,9 @@
+import $ from 'jquery';
+
+import 'parsleyjs';
+import intlTelInput from 'intl-tel-input';
+import 'bootstrap-datepicker'; 
+import 'bootstrap-datepicker/dist/locales/bootstrap-datepicker.en-GB.min.js';
 (function () {
   function myMap() {
     let mapProp = {
@@ -18,13 +24,15 @@
 
   document.addEventListener('DOMContentLoaded', function () {
     const phoneInput = document.querySelector('#phone');
-    const iti = window.intlTelInput(phoneInput, {
+    const iti = intlTelInput(phoneInput, {
       initialCountry: 'ua',
       separateDialCode: true,
       utilsScript: 'https://cdn.jsdelivr.net/npm/intl-tel-input@23.8.0/build/js/utils.js',
     });
 
     $('#birthdate').datepicker({
+      language: 'en-GB',
+      format: 'dd/mm/yyyy',
       autoclose: true,
     });
 
@@ -36,12 +44,12 @@
     function fetchCountryData() {
       const urlCountries = 'http://quest-registration-api.groupbwt.com/api/countries';
       fetch(urlCountries).then((response) => response.json()).then((data) => {
-          for (let i = 0; i < data.countries.length; i++) {
-            let isCountryUA = data.countries[i].id === 224;
+        for (let i = 0; i < data.countries.length; i++) {
+          let isCountryUA = data.countries[i].id === 224;
             if (isCountryUA) {
               countryInput.prepend(
                 $('<option value="' +
-                    data.countries[i].id +
+                    data.countries[i].code +
                     '" selected>' +
                     data.countries[i].name +
                     '</option>'
@@ -50,7 +58,7 @@
             } else {
               countryInput.prepend(
                 $('<option value="' +
-                    data.countries[i].id +'">' +
+                    data.countries[i].code +'">' +
                     data.countries[i].name +
                     '</option>'
                   )
@@ -171,7 +179,7 @@
       'Invalid number',
     ];
 
-    const iti = window.intlTelInput(input, {
+    const iti = intlTelInput(input, {
       initialCountry: 'ua',
       utilsScript:'https://cdn.jsdelivr.net/npm/intl-tel-input@23.8.0/build/js/utils.js',
     });
@@ -231,7 +239,6 @@
 
   validEmail();
 
-
   function shareSocialMedia() {
     const pageUrl = window.location.href;
     if (!pageUrl) return;
@@ -256,6 +263,5 @@
       });
     });
   }
-
   shareSocialMedia();
 })();
