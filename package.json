@@ -20,6 +20,8 @@
     "vite": "^6.3.6"
   },
   "dependencies": {
+    "@rollup/plugin-commonjs": "^29.0.0",
+    "@rollup/plugin-node-resolve": "^16.0.3",
     "axios": "^1.12.2",
     "bootstrap": "^4.6.2",
     "bootstrap-datepicker": "^1.10.1",
