@@ -26,6 +26,7 @@ import 'bootstrap-datepicker/dist/locales/bootstrap-datepicker.en-GB.min.js';
     // }
 
     const formStep1 = $('#form-step1');
+    const formStep2 = $('#form-step2');
     formStep1.parsley({
       excluded: '.iti__search-input',
     });
@@ -35,7 +36,8 @@ import 'bootstrap-datepicker/dist/locales/bootstrap-datepicker.en-GB.min.js';
     const iti = intlTelInput(phoneInput, {
       initialCountry: 'ua',
       separateDialCode: true,
-      utilsScript: 'https://cdn.jsdelivr.net/npm/intl-tel-input@23.8.0/build/js/utils.js',
+      utilsScript:
+        'https://cdn.jsdelivr.net/npm/intl-tel-input@23.8.0/build/js/utils.js',
     });
 
     const errorMsg = document.querySelector('#error-msg');
@@ -94,92 +96,90 @@ import 'bootstrap-datepicker/dist/locales/bootstrap-datepicker.en-GB.min.js';
     let countyList = [];
 
     function fetchCountryData() {
-      const urlCountries = 'http://quest-registration-api.groupbwt.com/api/countries';
+      const urlCountries =
+        'http://quest-registration-api.groupbwt.com/api/countries';
       axios.get(urlCountries).then((response) => {
         const countries = response.data.countries;
         countyList = countries;
-        console.log(countyList);
         for (let i = 0; i < countries.length; i++) {
           let isCountryUA = countries[i].id === 224;
           if (isCountryUA) {
             countryInput.prepend(
               $(
                 '<option value="' +
-                countries[i].code +
-                '" selected>' +
-                countries[i].name +
-                '</option>'
+                  countries[i].code +
+                  '" selected>' +
+                  countries[i].name +
+                  '</option>'
               )
             );
           } else {
             countryInput.prepend(
               $(
                 '<option value="' +
-                countries[i].code +
-                '">' +
-                countries[i].name +
-                '</option>'
+                  countries[i].code +
+                  '">' +
+                  countries[i].name +
+                  '</option>'
               )
             );
           }
         }
       });
-    };
-      fetchCountryData();
+    }
+    fetchCountryData();
 
-      function initValidationStep1() { }
+    function initValidationStep1() {}
 
-      function previewImage() {
-        const input = document.getElementById('image-upload');
-        const img = document.getElementById('preview-img');
-        if (!input || !img) return;
+    function previewImage() {
+      const input = document.getElementById('image-upload');
+      const img = document.getElementById('preview-img');
+      if (!input || !img) return;
 
-        input.addEventListener('change', function () {
-          const file = input.files[0];
-          if (!file) return;
+      input.addEventListener('change', function () {
+        const file = input.files[0];
+        if (!file) return;
 
-          if (file) {
-            const reader = new FileReader();
-            reader.addEventListener('load', function () {
-              img.src = reader.result;
-            });
-            reader.readAsDataURL(file);
+        if (file) {
+          const reader = new FileReader();
+          reader.addEventListener('load', function () {
+            img.src = reader.result;
+          });
+          reader.readAsDataURL(file);
+        }
+      });
+    }
+    function shareSocialMedia() {
+      const pageUrl = window.location.href;
+      if (!pageUrl) return;
+
+      const encodeUrl = encodeURIComponent(pageUrl);
+      const postText = encodeURIComponent(
+        "I'm sharing an interesting pet project with you."
+      );
+      const shareUrls = {
+        facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeUrl}`,
+        twitter: `https://twitter.com/intent/tweet?url=${encodeUrl}&text=${postText}`,
+      };
+
+      document.querySelectorAll('button[data-platform]').forEach((button) => {
+        button.addEventListener('click', () => {
+          const platform = button.getAttribute('data-platform');
+          if (!platform) return;
+
+          const url = shareUrls[platform];
+          if (url) {
+            window.open(url, '_blank', 'width=600,height=400');
           }
         });
-      }
-      function shareSocialMedia() {
-        const pageUrl = window.location.href;
-        if (!pageUrl) return;
+      });
+    }
 
-        const encodeUrl = encodeURIComponent(pageUrl);
-        const postText = encodeURIComponent(
-          "I'm sharing an interesting pet project with you."
-        );
-        const shareUrls = {
-          facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeUrl}`,
-          twitter: `https://twitter.com/intent/tweet?url=${encodeUrl}&text=${postText}`,
-        };
-
-        document.querySelectorAll('button[data-platform]').forEach((button) => {
-          button.addEventListener('click', () => {
-            const platform = button.getAttribute('data-platform');
-            if (!platform) return;
-
-            const url = shareUrls[platform];
-            if (url) {
-              window.open(url, '_blank', 'width=600,height=400');
-            }
-          });
-        });
-      }
-      
-
-      const btnStepFirst = document.getElementById('button-submit-step1');
-      const btnStepSecond = document.getElementById('button-submit-step2');
-      const contentStepFirst = document.getElementById('form-step1');
-      const contentStepSecond = document.getElementById('form-step2');
+    const btnStepFirst = document.getElementById('button-submit-step1');
+    const btnStepSecond = document.getElementById('button-submit-step2');
+    const contentStepFirst = document.getElementById('form-step1');
+    const contentStepSecond = document.getElementById('form-step2');
     const contentStepThird = document.getElementById('form-step3');
-
 
     function PutDataFormStep1() {
       const data = {};
@@ -195,88 +195,69 @@ import 'bootstrap-datepicker/dist/locales/bootstrap-datepicker.en-GB.min.js';
         data[key] = value;
       });
 
-      const urlPutsStep1 =
-        'http://quest-registration-api.groupbwt.com/api/members';
+      const urlPutsStep1 = 'http://quest-registration-api.groupbwt.com/api/members';
 
       axios
         .post(urlPutsStep1, data)
         .then((response) => {
           localStorage.setItem('currentStep', '2');
-          contentStepSecond.classList.remove('hide');
           contentStepFirst.classList.add('hide');
-          console.log('Ответ сервера:', response.data);
+          contentStepSecond.classList.remove('hide');
           initStep2();
-          initStep3();
         })
 
         .catch((error) =>
-          console.error('Ошибка:', error.response?.data || error)
+          console.error('Error', error.response?.data || error)
         );
     }
-  
-    
+
     function initStep2() {
-      contentStepSecond.classList.remove('hide');
-        // myMap();
-        previewImage();
+      previewImage();
 
-        btnStepSecond.addEventListener('click', function () {
-          const isValidSecondStep = $('#form-step2').parsley().validate();
-          console.log(isValidSecondStep, 'second step');
+      btnStepSecond.addEventListener('click', function (e) {
+        e.preventDefault();
 
-          if (isValidSecondStep) {
-            localStorage.setItem('currentStep', '3');
-            contentStepSecond.classList.add('hide');
-            contentStepThird.classList.remove('hide');
-          }
-        });
+        const isValidSecondStep = formStep2.parsley().validate();
+
+        if (isValidSecondStep) {
+          localStorage.setItem('currentStep', '3');
+          contentStepSecond.classList.add('hide');
+          contentStepThird.classList.remove('hide');
+          initStep3();
+        }
+      });
     }
 
     function initStep3() {
       contentStepThird.classList.remove('hide');
       shareSocialMedia();
-    };
+    }
 
-      const currentStep = localStorage.getItem('currentStep') || '1';
-      if (currentStep === '1') {
-        contentStepFirst.classList.remove('hide');
-        // myMap();
-        initValidationStep1();
+    const currentStep = localStorage.getItem('currentStep') || '1';
+    if (currentStep === '1') {
+      contentStepFirst.classList.remove('hide');
+      // myMap();
+      initValidationStep1();
 
-        btnStepFirst.addEventListener('click', function (e) {
-          e.preventDefault();
-          reset();
-          const number = iti.getNumber();
-          hiddenInput.value = number;
-          formStep1.parsley().validate();
+      btnStepFirst.addEventListener('click', function (e) {
+        e.preventDefault();
+        const number = iti.getNumber();
+        hiddenInput.value = number;
+        formStep1.parsley().validate();
 
-          const isValidFirstStepForm = formStep1.parsley().isValid();
-       
-          const isValidPhone = iti.isValidNumberPrecise();
-          console.log('isValidPhone', isValidPhone);
+        const isValidFirstStepForm = formStep1.parsley().isValid();
+        const isValidPhone = iti.isValidNumberPrecise();
 
-          if (!isValidPhone) {
-            const errorCode = iti.getValidationError();
-            const msg = errorMap[errorCode] || 'Invalid number';
-            showError(msg);
-          }
+        if (!isValidPhone) {
+          const errorCode = iti.getValidationError();
+          const msg = errorMap[errorCode] || 'Invalid number';
+          showError(msg);
+        }
 
-          console.log(isValidFirstStepForm, 'mmmm');
-          console.log(isValidPhone, "kkk");
-
-          if (isValidFirstStepForm && isValidPhone) {
-            PutDataFormStep1();
-
-          }
-        });
-      }
-
-      if (currentStep === '2') {
-        
-      }
-
-      if (currentStep === '3') {
-        
-      }
-    });
+        if (isValidFirstStepForm && isValidPhone) {
+          PutDataFormStep1();
+        }
+      });
+    }
+  });
 })();
