@@ -1,29 +1,31 @@
 import $ from 'jquery';
-import axios from 'axios';
 
 import 'parsleyjs';
 import intlTelInput from 'intl-tel-input';
 import 'bootstrap-datepicker';
 import 'bootstrap-datepicker/dist/locales/bootstrap-datepicker.en-GB.min.js';
+import { fetchCountryData, urlPutsStep1 } from './apiRequests.js';
 
 (function () {
   document.addEventListener('DOMContentLoaded', function () {
-    // function myMap() {
-    //   let mapProp = {
-    //     center: new google.maps.LatLng(34.10142, -118.34373),
-    //     zoom: 12,
-    //   };
+    let countyList = [];
 
-    //   let marker = new google.maps.Marker({
-    //     position: new google.maps.LatLng(34.10143056752168, -118.343672892704),
-    //   });
+    function myMap() {
+      let mapProp = {
+        center: new google.maps.LatLng(34.10142, -118.34373),
+        zoom: 12,
+      };
 
-    //   let map = new google.maps.Map(
-    //     document.getElementById('googleMap'),
-    //     mapProp
-    //   );
-    //   marker.setMap(map);
-    // }
+      let marker = new google.maps.Marker({
+        position: new google.maps.LatLng(34.10143056752168, -118.343672892704),
+      });
+
+      let map = new google.maps.Map(
+        document.getElementById('googleMap'),
+        mapProp
+      );
+      marker.setMap(map);
+    }
 
     const formStep1 = $('#form-step1');
     const formStep2 = $('#form-step2');
@@ -36,8 +38,7 @@ import 'bootstrap-datepicker/dist/locales/bootstrap-datepicker.en-GB.min.js';
     const iti = intlTelInput(phoneInput, {
       initialCountry: 'ua',
       separateDialCode: true,
-      utilsScript:
-        'https://cdn.jsdelivr.net/npm/intl-tel-input@23.8.0/build/js/utils.js',
+      utilsScript: 'https://cdn.jsdelivr.net/npm/intl-tel-input@23.8.0/build/js/utils.js',
     });
 
     const errorMsg = document.querySelector('#error-msg');
@@ -93,13 +94,8 @@ import 'bootstrap-datepicker/dist/locales/bootstrap-datepicker.en-GB.min.js';
       iti.setCountry(this.value);
     });
 
-    let countyList = [];
-
-    function fetchCountryData() {
-      const urlCountries =
-        'http://quest-registration-api.groupbwt.com/api/countries';
-      axios.get(urlCountries).then((response) => {
-        const countries = response.data.countries;
+    fetchCountryData()
+      .then((countries) => {
         countyList = countries;
         for (let i = 0; i < countries.length; i++) {
           let isCountryUA = countries[i].id === 224;
@@ -125,11 +121,7 @@ import 'bootstrap-datepicker/dist/locales/bootstrap-datepicker.en-GB.min.js';
             );
           }
         }
-      });
-    }
-    fetchCountryData();
-
-    function initValidationStep1() {}
+      })
 
     function previewImage() {
       const input = document.getElementById('image-upload');
@@ -149,6 +141,7 @@ import 'bootstrap-datepicker/dist/locales/bootstrap-datepicker.en-GB.min.js';
         }
       });
     }
+
     function shareSocialMedia() {
       const pageUrl = window.location.href;
       if (!pageUrl) return;
@@ -195,17 +188,14 @@ import 'bootstrap-datepicker/dist/locales/bootstrap-datepicker.en-GB.min.js';
         data[key] = value;
       });
 
-      const urlPutsStep1 = 'http://quest-registration-api.groupbwt.com/api/members';
-
-      axios
-        .post(urlPutsStep1, data)
+      urlPutsStep1(data)
         .then((response) => {
           localStorage.setItem('currentStep', '2');
+          myMap();
           contentStepFirst.classList.add('hide');
           contentStepSecond.classList.remove('hide');
           initStep2();
         })
-
         .catch((error) =>
           console.error('Error', error.response?.data || error)
         );
@@ -216,11 +206,11 @@ import 'bootstrap-datepicker/dist/locales/bootstrap-datepicker.en-GB.min.js';
 
       btnStepSecond.addEventListener('click', function (e) {
         e.preventDefault();
-
         const isValidSecondStep = formStep2.parsley().validate();
 
         if (isValidSecondStep) {
           localStorage.setItem('currentStep', '3');
+          myMap();
           contentStepSecond.classList.add('hide');
           contentStepThird.classList.remove('hide');
           initStep3();
@@ -236,8 +226,7 @@ import 'bootstrap-datepicker/dist/locales/bootstrap-datepicker.en-GB.min.js';
     const currentStep = localStorage.getItem('currentStep') || '1';
     if (currentStep === '1') {
       contentStepFirst.classList.remove('hide');
-      // myMap();
-      initValidationStep1();
+      myMap();
 
       btnStepFirst.addEventListener('click', function (e) {
         e.preventDefault();

@@ -1,22 +1,19 @@
-import axios from 'axios';
+import { getListMembers } from './apiRequests.js';
 
 (function () {
-  function getListMembers() {
-    const urlMembers = 'http://quest-registration-api.groupbwt.com/api/members?per_page=100';
-    axios.get(urlMembers).then((response) => {
-      const data = response.data;
-      if (!data) return;
-      const maxIndex = data.data.length;
-      const allMembers = document.querySelectorAll('.all-members');
-      if (!allMembers) return;
-      allMembers.forEach((item) => {
-        const textMembers = `All members: ${maxIndex}`;
-        item.textContent = textMembers;
-      });
-      createTableMembers(data.data);
+  getListMembers()
+    .then((response) => {
+    const data = response.data;
+    if (!data) return;
+    const maxIndex = data.data.length;
+    const allMembers = document.querySelectorAll('.all-members');
+    if (!allMembers) return;
+    allMembers.forEach((item) => {
+      const textMembers = `All members: ${maxIndex}`;
+      item.textContent = textMembers;
     });
-  }
-  getListMembers();
+    createTableMembers(data.data);
+  });
 
   function createTableMembers(members) {
     const tableMembers = document.createElement('table');
@@ -46,7 +43,8 @@ import axios from 'axios';
         image.classList.add('photo-default');
         image.src = '/images/photo-default.jpg';
       } else {
-        image.src = `http://quest-registration-api.groupbwt.com/` + member.photo_url;
+        image.src =
+          `http://quest-registration-api.groupbwt.com/` + member.photo_url;
       }
 
       photo.textContent = `${member.photo_url}`;
